@@ -67,7 +67,14 @@ p { color: var(--soft); }
 .portal-edge .inner { stroke: #fff; stroke-width: 4; filter: none; animation: edgeglow 1.4s ease-in-out infinite; }
 @keyframes edgeglow { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
 @keyframes edge { 0%, 100% { stroke-width: 14; } 50% { stroke-width: 8; } }
-#attract.roar .portal-edge, #attract.roar .attract-copy, #attract.roar .portal-glow, #attract.roar .wordmark { opacity: 0; pointer-events: none; }
+#attract.roar .tap-hint, #attract.roar .portal-edge, #attract.roar .attract-copy, #attract.roar .portal-glow, #attract.roar .wordmark { opacity: 0; pointer-events: none; }
+/* Invitación discreta a tocar */
+.tap-hint { position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; padding: 18px 34px 18px 22px; border-radius: 999px; white-space: nowrap;
+  font-weight: 700; font-size: 28px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
+  background: rgba(255, 255, 255, .35); border: 1px solid rgba(255, 255, 255, .6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  animation: hint 2.8s ease-in-out infinite; transition: opacity .4s; }
+.tap-hint span { width: 18px; height: 18px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 14px rgba(246, 182, 14, .9); }
+@keyframes hint { 0%, 100% { opacity: .45; } 50% { opacity: .75; } }
 .skip { position: absolute; right: 64px; bottom: 90px; padding: 22px 38px; border-radius: 999px; font-weight: 700; font-size: 30px; opacity: 0; pointer-events: none; transition: opacity .5s 2s; }
 #attract.roar .skip { opacity: 1; pointer-events: auto; }
 
