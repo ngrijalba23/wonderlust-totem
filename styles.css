@@ -68,13 +68,20 @@ p { color: var(--soft); }
 @keyframes edgeglow { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
 @keyframes edge { 0%, 100% { stroke-width: 14; } 50% { stroke-width: 8; } }
 #attract.roar .tap-hint, #attract.roar .portal-edge, #attract.roar .attract-copy, #attract.roar .portal-glow, #attract.roar .wordmark { opacity: 0; pointer-events: none; }
-/* Invitación discreta a tocar */
-.tap-hint { position: absolute; bottom: 110px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; padding: 18px 34px 18px 22px; border-radius: 999px; white-space: nowrap;
-  font-weight: 700; font-size: 28px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
-  background: rgba(255, 255, 255, .35); border: 1px solid rgba(255, 255, 255, .6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  animation: hint 2.8s ease-in-out infinite; transition: opacity .4s; }
-.tap-hint span { width: 18px; height: 18px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 14px rgba(246, 182, 14, .9); }
-@keyframes hint { 0%, 100% { opacity: .45; } 50% { opacity: .75; } }
+/* Invitación a tocar: dorada, grande y con pulso para que llame a quien pasa */
+.tap-hint { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 34px; padding: 24px 70px 24px 24px; border-radius: 999px; white-space: nowrap;
+  background: var(--gold); color: #111114; box-shadow: 0 0 0 0 rgba(246, 182, 14, .7), 0 30px 60px -20px rgba(148, 101, 0, .7);
+  animation: invite 1.8s ease-out infinite, bob 3.6s ease-in-out infinite; transition: opacity .4s; }
+.tap-hint p { font-size: 36px; font-weight: 500; line-height: 1.15; color: rgba(17, 17, 20, .75); }
+.tap-hint b { display: block; font-family: Tanker; font-weight: 400; font-size: 82px; line-height: .95; text-transform: uppercase; color: #111114; }
+.hand { position: relative; width: 150px; height: 150px; flex: none; border-radius: 50%; background: #fff; display: grid; place-items: center; }
+.hand span { font-size: 80px; line-height: 1; animation: press 1.8s ease-in-out infinite; }
+.hand i { position: absolute; inset: 0; border-radius: 50%; border: 4px solid #fff; animation: ripple2 1.8s ease-out infinite; }
+.hand i + i { animation-delay: .6s; }
+@keyframes invite { 0% { box-shadow: 0 0 0 0 rgba(246, 182, 14, .75), 0 30px 60px -20px rgba(148, 101, 0, .7); } 70%, 100% { box-shadow: 0 0 0 46px rgba(246, 182, 14, 0), 0 30px 60px -20px rgba(148, 101, 0, .7); } }
+@keyframes bob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-14px); } }
+@keyframes press { 0%, 100% { transform: translateY(0) scale(1); } 40% { transform: translateY(8px) scale(.9); } }
+@keyframes ripple2 { from { transform: scale(1); opacity: .9; } to { transform: scale(1.7); opacity: 0; } }
 .skip { position: absolute; right: 64px; bottom: 90px; padding: 22px 38px; border-radius: 999px; font-weight: 700; font-size: 30px; opacity: 0; pointer-events: none; transition: opacity .5s 2s; }
 #attract.roar .skip { opacity: 1; pointer-events: auto; }
 
