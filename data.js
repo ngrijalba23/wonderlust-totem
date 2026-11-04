@@ -40,8 +40,7 @@ const CLUSTERS = [
       ['Transmisión a varias plataformas', 'La misma señal en la web, redes y plataformas internas.', I + 'th-multiplataforma.jpg']
     ],
     cases: [
-      { brand: 'ZEISS Vision Care · Nestlé Ascenda', title: 'Ciencia contada en set virtual', text: 'Desde nuestro estudio transmitimos contenido científico para marcas de salud y bienestar, con sets virtuales que hacen visual la explicación técnica.', video: V + 'ciencia.mp4', poster: I + 'ciencia.jpg' },
-      { brand: 'Estudio Wonderlust · Bogotá', title: 'Así se ve un streaming nuestro', text: 'Un recorrido por el estudio de croma, las cámaras y los escenarios que armamos para cada transmisión.', video: V + 'reel-streaming.mp4', poster: I + 'cl-streaming.jpg', sound: true }
+      { brand: 'ZEISS Vision Care · Nestlé Ascenda', title: 'Ciencia contada en set virtual', text: 'Desde nuestro estudio transmitimos contenido científico para marcas de salud y bienestar, con sets virtuales que hacen visual la explicación técnica.', video: V + 'ciencia.mp4', poster: I + 'ciencia.jpg' }
     ]
   },
   {

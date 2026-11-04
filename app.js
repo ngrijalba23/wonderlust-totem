@@ -128,6 +128,8 @@
     $('#clDesc').textContent = c.desc;
     const loop = $('#clLoop');
     if (loop.dataset.src !== c.loop) { loop.pause(); loop.removeAttribute('src'); loop.dataset.src = c.loop; loop.load(); }
+    // Si el video ya estaba a la vista, el observador no avisa de nuevo: se vuelve a observar
+    seen.unobserve(loop); seen.observe(loop);
     $('#playReel').onclick = () => openPlayer({ iframe: c.reel + '?autoplay=1&title=0&byline=0&portrait=0', brand: 'Reel', title: c.title.join(' ') });
 
     $('#clServices').innerHTML = c.services.map(([h, b, img]) => `<button class="svc">
@@ -211,6 +213,8 @@
       const v = $('video', media);
       v.addEventListener('loadedmetadata', () => { v.className = v.videoHeight > v.videoWidth ? 'v' : 'h'; });
       v.addEventListener('click', () => v.paused ? v.play() : v.pause());
+      // Si el navegador no deja arrancar con sonido, arranca en silencio en vez de quedarse congelado
+      v.play().catch(() => { v.muted = true; v.play().catch(() => {}); });
     }
     $('#playerCopy').innerHTML = `<div class="brand">${o.brand || ''}</div><h3>${o.title || ''}</h3>${o.text ? `<p>${o.text}</p>` : ''}${o.stat ? `<div class="st"><b>${o.stat[0]}</b><span>${o.stat[1]}</span></div>` : ''}`;
     player.classList.add('open');
