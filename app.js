@@ -24,77 +24,75 @@
     current = id;
     syncVideos();
     if (id === 'attract') resetAttract();
-    if (id === 'world') $('#world').scrollTop = 0;
+    if (id === 'world' || id === 'close') $('#' + id).scrollTop = 0;
   }
 
-  // Solo suenan/reproducen los videos de la pantalla visible
+  // Solo se reproducen los videos de la pantalla visible
   function syncVideos() {
     $$('.screen video').forEach(v => {
-      const on = v.closest('.screen').id === current && v.id !== 'dino';
-      if (on && v.src) v.play().catch(() => {});
-      else if (v.id !== 'dino') v.pause();
+      if (v.id === 'intro') return;
+      if (v.closest('.screen').id === current && v.src) v.play().catch(() => {});
+      else v.pause();
     });
   }
 
-  // ---------- 1 · El rugido ----------
-  const dino = $('#dino');
-  const roars = ['assets/sfx/roar1.mp3', 'assets/sfx/roar2.mp3'].map(src => { const a = new Audio(src); a.preload = 'auto'; return a; });
-  let roaring = false;
+  // ---------- 1 · El T-rex cruza el umbral ----------
+  // ROAR_AT: segundo del video en que ruge (temblor y destello)
+  const intro = $('#intro');
+  const ROAR_AT = 5.8;
+  let roaring = false, shook = false;
   let timers = [];
 
   function wake() {
     if (roaring) return;
     roaring = true;
-    const att = $('#attract');
-    att.classList.add('roar');
-    dino.currentTime = 0;
-    dino.play().catch(() => {});
-    const roar = roars[Math.floor(Math.random() * roars.length)];
-    timers.push(setTimeout(() => { roar.currentTime = 0; roar.play().catch(() => {}); }, 350));
-    timers.push(setTimeout(() => { stage.classList.remove('shake'); void stage.offsetWidth; stage.classList.add('shake'); }, 550));
-    timers.push(setTimeout(enterWorld, 5600));
+    shook = false;
+    $('#attract').classList.add('roar');
+    intro.muted = false;
+    intro.currentTime = 0;
+    intro.play().catch(() => { intro.muted = true; intro.play().catch(enterWorld); });
   }
 
+  intro.addEventListener('timeupdate', () => {
+    if (!roaring || shook || intro.currentTime < ROAR_AT) return;
+    shook = true;
+    stage.classList.remove('shake'); void stage.offsetWidth; stage.classList.add('shake');
+    $('#attract').classList.remove('flashing'); void stage.offsetWidth; $('#attract').classList.add('flashing');
+  });
+  intro.addEventListener('ended', () => { if (roaring) enterWorld(); });
+  intro.addEventListener('error', () => { if (roaring) enterWorld(); });
+
+  let entering = false;
   function enterWorld() {
+    if (entering) return;
+    entering = true;
     const door = document.createElement('div');
     door.className = 'door';
     stage.appendChild(door);
     setTimeout(() => { show('world'); door.classList.add('out'); }, 1000);
-    setTimeout(() => door.remove(), 2000);
+    setTimeout(() => { door.remove(); entering = false; }, 2000);
   }
 
   function resetAttract() {
     timers.forEach(clearTimeout);
     timers = [];
     roaring = false;
-    $('#attract').classList.remove('roar');
+    $('#attract').classList.remove('roar', 'flashing');
     stage.classList.remove('shake');
-    dino.pause();
-    dino.currentTime = 0;
+    intro.pause();
+    intro.currentTime = 0;
   }
 
-  $('#attract').addEventListener('pointerdown', wake);
-
-  // Los objetos salen del agua y se hunden: se repite solo el tramo en que están arriba
-  const WIN = [1.8, 6.0];
-  document.addEventListener('timeupdate', e => {
-    const v = e.target;
-    if (v.classList && v.classList.contains('obj') && (v.currentTime > WIN[1] || v.currentTime < WIN[0] - .05)) v.currentTime = WIN[0];
-  }, true);
-  document.addEventListener('ended', e => { if (e.target.classList.contains('obj')) { e.target.currentTime = WIN[0]; e.target.play(); } }, true);
+  $('#attract').addEventListener('pointerdown', e => { if (!e.target.closest('.skip')) wake(); });
+  $('#attract .skip').addEventListener('click', enterWorld);
 
   // ---------- 2 · Portales ----------
-  const portals = $('#portals');
   CLUSTERS.forEach((c, i) => {
     const b = document.createElement('button');
     b.className = 'portal';
-    b.style.setProperty('--c', c.color);
-    b.innerHTML = `<div class="halo"></div><div class="beam"></div><div class="pool"></div>
-      <video class="obj" muted playsinline autoplay src="${c.obj}" style="--oy:${c.objY}px"></video>
-      <span class="num">${c.num}</span><span class="go">→</span>
-      <span class="name">${c.title.join('<br>')}</span>`;
-    b.addEventListener('click', () => { b.classList.add('pulse'); setTimeout(() => { b.classList.remove('pulse'); openCluster(i); }, 260); });
-    portals.appendChild(b);
+    b.innerHTML = `<div class="in"><img src="${c.cover}" alt=""><span class="go">→</span><span class="name">${c.title.join('<br>')}</span></div>`;
+    b.addEventListener('click', () => { b.classList.add('pulse'); setTimeout(() => { b.classList.remove('pulse'); openCluster(i); }, 300); });
+    $('#portals').appendChild(b);
   });
 
   $('#marquee').innerHTML = [...CLIENTS, ...CLIENTS].map(n => `<span>${n}</span>`).join('');
@@ -103,25 +101,22 @@
   const dots = $('#dots');
   CLUSTERS.forEach((c, i) => {
     const d = document.createElement('button');
-    d.addEventListener('click', () => openCluster(i));
+    d.addEventListener('click', () => openCluster(i, i > clIndex ? 1 : -1));
     dots.appendChild(d);
   });
 
   function renderCluster(i) {
     const c = CLUSTERS[i];
-    const sec = $('#cluster');
-    sec.style.setProperty('--c', c.color);
-    $('#clNum').textContent = c.num;
-    $('#clTitle').innerHTML = `${c.title[0]}<span>${c.title[1]}</span>`;
+    $('#clCover').src = c.cover;
+    $('#clTitle').innerHTML = `${c.title[0]}<span><em>${c.title[1]}</em></span>`;
     $('#clTag').textContent = c.tagline;
     $('#clDesc').textContent = c.desc;
-    $('#recName').textContent = c.title.join(' ').replace('&', 'y');
-    setVideo($('#clObj'), c.obj);
-    $('#clObj').style.setProperty('--oy', c.objY * 1.2 + 'px');
     setVideo($('#clLoop'), c.loop);
-    $('#playReel').onclick = () => openPlayer({ iframe: c.reel + '?autoplay=1&title=0&byline=0&portrait=0', brand: `Cluster ${c.num}`, title: c.title.join(' '), color: c.color });
+    $('#playReel').onclick = () => openPlayer({ iframe: c.reel + '?autoplay=1&title=0&byline=0&portrait=0', brand: 'Reel', title: c.title.join(' ') });
 
-    $('#clServices').innerHTML = c.services.map(([h, b]) => `<button class="svc"><div class="h">${h}<i>+</i></div><div class="b">${b}</div></button>`).join('');
+    $('#clServices').innerHTML = c.services.map(([h, b, img]) => `<button class="svc">
+      <div class="th${img ? '' : ' none'}"${img ? ` style="background-image:url('${img}')"` : ''}></div>
+      <div class="tx"><div class="h">${h}<i>+</i></div><div class="b">${b}</div></div></button>`).join('');
     $$('#clServices .svc').forEach(s => s.addEventListener('click', () => {
       const open = s.classList.contains('open');
       $$('#clServices .svc').forEach(o => o.classList.remove('open'));
@@ -129,17 +124,17 @@
     }));
 
     const cases = $('#clCases');
-    cases.innerHTML = c.cases.map((k, j) => `<button class="case" data-j="${j}">
+    cases.innerHTML = c.cases.map((k, j) => `<button class="case bezel" data-j="${j}"><div class="in">
       <div class="ph" style="background-image:url('${k.poster}')"></div>
-      <div class="t"><div class="brand">${k.brand}</div><h3>${k.title}</h3></div></button>`).join('');
+      <div class="t"><div class="brand">${k.brand}</div><h3>${k.title}</h3></div></div></button>`).join('');
     cases.scrollLeft = 0;
     $$('.case', cases).forEach(el => el.addEventListener('click', () => {
       const k = c.cases[+el.dataset.j];
-      openPlayer({ video: k.video, brand: k.brand, title: k.title, text: k.text, stat: k.stat, color: c.color });
+      openPlayer({ video: k.video, brand: k.brand, title: k.title, text: k.text, stat: k.stat });
     }));
 
     const n = CLUSTERS[(i + 1) % CLUSTERS.length];
-    $('#nextCl').innerHTML = `<button style="--nc:${n.color}"><div><small>Siguiente portal</small><strong>${n.title.join('<br>')}</strong></div><i>→</i></button>`;
+    $('#nextCl').innerHTML = `<button class="bezel"><div class="in"><img src="${n.cover}" alt=""><div><small>Siguiente portal</small><strong>${n.title.join('<br>')}</strong></div><i>→</i></div></button>`;
     $('#nextCl button').onclick = () => openCluster((i + 1) % CLUSTERS.length, 1);
 
     $$('button', dots).forEach((d, j) => d.classList.toggle('on', j === i));
@@ -186,7 +181,7 @@
   });
 
   // ---------- 4 · Cierre ----------
-  $('#steps').innerHTML = STEPS.map(([b, s], i) => `<div class="step" style="animation-delay:${.15 + i * .12}s"><div class="orb"></div><div><b>${b}</b><span>${s}</span></div></div>`).join('');
+  $('#steps').innerHTML = STEPS.map(([b, s, img], i) => `<div class="step glass" style="animation-delay:${.15 + i * .14}s"><img src="${img}" alt=""><b>${b}</b><span>${s}</span></div>`).join('');
   if (window.qrcode) {
     const q = qrcode(0, 'M');
     q.addData('https://wonderlust.live');
@@ -201,18 +196,12 @@
   const media = $('#playerMedia');
 
   function openPlayer(o) {
-    player.style.setProperty('--c', o.color);
     if (o.iframe) {
       media.innerHTML = `<iframe src="${o.iframe}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-      player.classList.add('horizontal');
     } else {
       media.innerHTML = `<video src="${o.video}" playsinline autoplay loop></video>`;
       const v = $('video', media);
-      v.addEventListener('loadedmetadata', () => {
-        const vertical = v.videoHeight > v.videoWidth;
-        v.className = vertical ? 'v' : 'h';
-        player.classList.toggle('horizontal', !vertical);
-      });
+      v.addEventListener('loadedmetadata', () => { v.className = v.videoHeight > v.videoWidth ? 'v' : 'h'; });
       v.addEventListener('click', () => v.paused ? v.play() : v.pause());
     }
     $('#playerCopy').innerHTML = `<div class="brand">${o.brand || ''}</div><h3>${o.title || ''}</h3>${o.text ? `<p>${o.text}</p>` : ''}${o.stat ? `<div class="st"><b>${o.stat[0]}</b><span>${o.stat[1]}</span></div>` : ''}`;
@@ -222,19 +211,18 @@
 
   function closePlayer() {
     player.classList.remove('open');
-    setTimeout(() => { if (!player.classList.contains('open')) media.innerHTML = ''; }, 400);
+    setTimeout(() => { if (!player.classList.contains('open')) media.innerHTML = ''; }, 500);
     syncVideos();
   }
   $('#playerClose').addEventListener('click', closePlayer);
 
-  // ---------- Onda de luz en cada toque ----------
+  // ---------- Onda dorada en cada toque ----------
   stage.addEventListener('pointerdown', e => {
     const r = stage.getBoundingClientRect();
     const fx = document.createElement('div');
     fx.className = 'tap-fx';
     fx.style.left = (e.clientX - r.left) / scale + 'px';
     fx.style.top = (e.clientY - r.top) / scale + 'px';
-    if (current === 'cluster') fx.style.setProperty('--tc', CLUSTERS[clIndex].color);
     $('#fx').appendChild(fx);
     setTimeout(() => fx.remove(), 750);
   }, true);

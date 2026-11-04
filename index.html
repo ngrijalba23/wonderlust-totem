@@ -10,123 +10,114 @@
 <body>
 <div id="stage">
 
-  <!-- 1 · Pantalla de espera: el dinosaurio duerme bajo el agua -->
+  <!-- 1 · Espera: el portal dorado brilla; al tocar, el T-rex de cristal lo atraviesa y ruge -->
   <section id="attract" class="screen active">
-    <div class="glow"></div>
-    <img class="logo-top" src="assets/img/logo-green.png" alt="Wonderlust">
+    <video id="intro" playsinline preload="auto" poster="assets/img/intro-start.jpg"><source src="assets/v/intro.mp4" type="video/mp4"></video>
+    <div class="portal-glow"></div>
+    <img class="wordmark" src="assets/img/wordmark.png" alt="Wonderlust">
     <div class="attract-copy">
-      <p class="kicker">// el lenguaje del asombro</p>
-      <h1>Algo se mueve<br>bajo el agua</h1>
+      <h1>Algo viene<br>del otro <em>lado</em></h1>
     </div>
-    <div class="pond">
-      <div class="surface"></div>
-      <div class="bubbles"><i style="left:47%;animation-delay:.2s"></i><i style="left:52%;animation-delay:1.1s;width:9px;height:9px"></i><i style="left:44%;animation-delay:2s;width:11px;height:11px"></i><i style="left:55%;animation-delay:2.6s"></i></div>
-      <video id="dino" muted playsinline preload="auto"><source src="assets/v/dino-roar.webm" type="video/webm"></video>
-      <div class="ripple r1"></div><div class="ripple r2"></div><div class="ripple r3"></div>
-    </div>
-    <div class="touch-hint">
+    <div class="touch-hint glass">
       <div class="finger"><span></span></div>
-      <p>Toca la pantalla<br><b>y despierta al dinosaurio</b></p>
+      <p>Toca la pantalla y <b>abre el portal</b></p>
     </div>
+    <button class="skip glass">Entrar →</button>
     <div class="flash"></div>
-    <div class="colorbar"></div>
   </section>
 
-  <!-- 2 · Mundo Wonderlust: los cuatro portales -->
-  <section id="world" class="screen">
-    <div class="glow"></div>
+  <!-- 2 · Mundo Wonderlust: cuatro portales -->
+  <section id="world" class="screen scroll">
+    <div class="bg" style="background-image:url(assets/img/bg-casos.jpg)"></div>
     <header class="top">
-      <img src="assets/img/logo-green.png" alt="Wonderlust" class="logo-sm">
+      <img src="assets/img/wordmark.png" alt="Wonderlust" class="wordmark-sm">
       <span class="tag">Bogotá · Miami</span>
     </header>
     <div class="world-intro">
-      <p class="kicker">// bienvenidos al estudio</p>
-      <h2>Cuatro formas<br>de cruzar<br>el umbral</h2>
-      <p class="lead">Escoge un portal y entra.</p>
+      <h2>Cuatro formas<br>de cruzar el <em>umbral</em></h2>
+      <p class="lead">Producción, transmisiones, plataformas y experiencias. Escoge una y entra.</p>
     </div>
     <div class="portals" id="portals"></div>
-    <div class="stat">
+    <div class="stat glass">
       <div class="big">+1.000</div>
-      <p>proyectos audiovisuales<br>ejecutados en la región</p>
+      <p>proyectos audiovisuales ejecutados en Colombia, México, Perú, Estados Unidos, España y Dubái</p>
     </div>
     <div class="marquee"><div class="track" id="marquee"></div></div>
-    <button class="cta-end" data-go="close">Creamos el momento que nadie olvida&nbsp;&nbsp;→</button>
-    <div class="colorbar"></div>
+    <button class="cta" data-go="close">Cómo trabajamos <i>→</i></button>
   </section>
 
   <!-- 3 · Interior de cada cluster -->
   <section id="cluster" class="screen">
-    <div class="glow"></div>
+    <div class="bg" style="background-image:url(assets/img/bg-juegos.jpg)"></div>
     <header class="top">
-      <button class="back" data-go="world">← Mundo Wonderlust</button>
-      <div class="dots" id="dots"></div>
+      <button class="back glass" data-go="world">← Mundo Wonderlust</button>
+      <div class="dots glass" id="dots"></div>
     </header>
     <div class="cl-scroll" id="clScroll">
       <div class="cl-hero">
-        <div class="cl-num" id="clNum">01</div>
-        <h2 id="clTitle"></h2>
-        <p class="cl-tagline" id="clTag"></p>
-        <div class="cl-portal">
-          <div class="beam"></div>
-          <video id="clObj" class="obj" muted playsinline autoplay></video>
-          <div class="floor"></div>
+        <img id="clCover" alt="">
+        <div class="cl-head">
+          <h2 id="clTitle"></h2>
+          <p class="cl-tagline" id="clTag"></p>
         </div>
-        <p class="cl-desc" id="clDesc"></p>
       </div>
+      <div class="cl-desc glass"><p id="clDesc"></p></div>
 
       <div class="block">
-        <p class="kicker">// míralo en acción</p>
-        <div class="rec" id="clRec">
-          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
-          <span class="rec-label"><i></i>REC · <em id="recName"></em></span>
+        <h3 class="sub">Míralo en acción</h3>
+        <div class="bezel">
           <video id="clLoop" muted playsinline loop autoplay></video>
-          <button class="play-reel" id="playReel"><span>▶</span> Ver el reel completo</button>
         </div>
+        <button class="cta reel" id="playReel">Ver el reel completo <i>▶</i></button>
       </div>
 
       <div class="block">
-        <p class="kicker">// qué hacemos</p>
-        <div class="services" id="clServices"></div>
+        <h3 class="sub">Qué hacemos</h3>
+        <div class="services glass" id="clServices"></div>
       </div>
 
       <div class="block">
-        <p class="kicker">// casos que operamos</p>
+        <h3 class="sub">Casos que operamos</h3>
         <div class="cases" id="clCases"></div>
       </div>
 
       <div class="next-cl" id="nextCl"></div>
     </div>
-    <div class="swipe-hint">Desliza para cambiar de portal</div>
-    <div class="colorbar"></div>
+    <div class="swipe-hint">Desliza a los lados para cambiar de portal</div>
   </section>
 
   <!-- 4 · Cierre -->
-  <section id="close" class="screen">
-    <div class="glow"></div>
+  <section id="close" class="screen scroll">
+    <div class="bg" style="background-image:url(assets/img/bg-cierre.jpg)"></div>
     <header class="top">
-      <button class="back" data-go="world">← Mundo Wonderlust</button>
+      <button class="back glass" data-go="world">← Mundo Wonderlust</button>
     </header>
     <div class="close-copy">
-      <p class="kicker">// el mundo necesita volver a asombrarse</p>
-      <h2><span class="amber">No hacemos contenido.</span><br>Creamos el momento que nadie olvida.</h2>
+      <h2>Un solo equipo,<br>de la idea al <em>montaje</em></h2>
       <div class="steps" id="steps"></div>
-      <div class="qr-wrap">
-        <div id="qr"></div>
-        <p>Escanea y conoce<br><b>wonderlust.live</b></p>
+      <div class="closing glass">
+        <h3>No hacemos contenido. Creamos el momento que <em>nadie olvida</em>.</h3>
+        <div class="qr-wrap">
+          <div id="qr"></div>
+          <div>
+            <p>Escanea y conoce <b>wonderlust.live</b></p>
+            <p class="mails">pcubides@wonderlust.live<br>ngrijalba@wonderlust.live</p>
+          </div>
+        </div>
       </div>
-      <p class="mails">pcubides@wonderlust.live<br>ngrijalba@wonderlust.live</p>
-      <button class="restart" data-go="attract">Volver a despertar al dinosaurio</button>
+      <button class="restart" data-go="attract">Volver a abrir el portal</button>
     </div>
-    <div class="colorbar"></div>
   </section>
 
   <!-- Reproductor a pantalla completa -->
   <div id="player" class="player">
-    <button class="x" id="playerClose">×</button>
+    <button class="x glass" id="playerClose">×</button>
     <div class="player-media" id="playerMedia"></div>
-    <div class="player-copy" id="playerCopy"></div>
+    <div class="player-copy glass" id="playerCopy"></div>
   </div>
 
+  <div class="grain"></div>
+  <div class="stripe"></div>
   <div id="fx"></div>
 </div>
 
