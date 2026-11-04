@@ -18,10 +18,10 @@
     <div class="attract-copy">
       <h1>Algo viene<br>del otro <em>lado</em></h1>
     </div>
-    <div class="touch-hint glass">
-      <div class="finger"><span></span></div>
-      <p>Toca la pantalla y <b>abre el portal</b></p>
-    </div>
+    <svg class="portal-edge" viewBox="0 0 1080 1920" aria-hidden="true">
+      <polygon points="372,588 668,598 760,1336 262,1336" />
+      <polygon class="inner" points="372,588 668,598 760,1336 262,1336" />
+    </svg>
     <button class="skip glass">Entrar →</button>
     <div class="flash"></div>
   </section>
@@ -30,7 +30,7 @@
   <section id="world" class="screen scroll">
     <div class="bg" style="background-image:url(assets/img/bg-casos.jpg)"></div>
     <header class="top">
-      <img src="assets/img/wordmark.png" alt="Wonderlust" class="wordmark-sm">
+      <button class="home" data-go="attract"><img src="assets/img/wordmark.png" alt="Wonderlust" class="wordmark-sm"></button>
       <span class="tag">Bogotá · Miami</span>
     </header>
     <div class="world-intro">
@@ -50,7 +50,8 @@
   <section id="cluster" class="screen">
     <div class="bg" style="background-image:url(assets/img/bg-juegos.jpg)"></div>
     <header class="top">
-      <button class="back glass" data-go="world">← Mundo Wonderlust</button>
+      <button class="home" data-go="attract"><img src="assets/img/wordmark.png" alt="Wonderlust" class="wordmark-sm"></button>
+      <button class="back glass" data-go="world">← Portales</button>
       <div class="dots glass" id="dots"></div>
     </header>
     <div class="cl-scroll" id="clScroll">
@@ -66,7 +67,7 @@
       <div class="block">
         <h3 class="sub">Míralo en acción</h3>
         <div class="bezel">
-          <video id="clLoop" muted playsinline loop autoplay></video>
+          <video id="clLoop" muted playsinline loop preload="none"></video>
         </div>
         <button class="cta reel" id="playReel">Ver el reel completo <i>▶</i></button>
       </div>
@@ -90,7 +91,8 @@
   <section id="close" class="screen scroll">
     <div class="bg" style="background-image:url(assets/img/bg-cierre.jpg)"></div>
     <header class="top">
-      <button class="back glass" data-go="world">← Mundo Wonderlust</button>
+      <button class="home" data-go="attract"><img src="assets/img/wordmark.png" alt="Wonderlust" class="wordmark-sm"></button>
+      <button class="back glass" data-go="world">← Portales</button>
     </header>
     <div class="close-copy">
       <h2>Un solo equipo,<br>de la idea al <em>montaje</em></h2>

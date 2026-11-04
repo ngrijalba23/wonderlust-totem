@@ -12,11 +12,11 @@ const CLUSTERS = [
     loop: V + 'cl-audiovisual.mp4',
     reel: 'https://player.vimeo.com/video/1218081987',
     services: [
-      ['Comerciales y piezas para redes', 'Ideas pensadas para cada pantalla, del guion a la entrega final.', I + 'cov-stream.jpg'],
-      ['Cubrimiento de eventos', 'Lo que pasó en el salón, contado para quienes no estuvieron.'],
-      ['Documentales de marca', 'Historias reales de la empresa, su gente y sus procesos.'],
-      ['Avatares con IA', 'Presentadores digitales que hablan en varios idiomas sin volver a grabar.', I + 'cov-ia.jpg'],
-      ['Proyección y mapping', 'Gran formato sobre superficies convencionales y no convencionales.', I + 'cov-mapping.jpg']
+      ['Comerciales y piezas para redes', 'Ideas pensadas para cada pantalla, del guion a la entrega final.', I + 'th-stream.jpg'],
+      ['Cubrimiento de eventos', 'Lo que pasó en el salón, contado para quienes no estuvieron.', I + 'th-eventos.jpg'],
+      ['Documentales de marca', 'Historias reales de la empresa, su gente y sus procesos.', I + 'th-documental.jpg'],
+      ['Avatares con IA', 'Presentadores digitales que hablan en varios idiomas sin volver a grabar.', I + 'th-ia.jpg'],
+      ['Proyección y mapping', 'Gran formato sobre superficies convencionales y no convencionales.', I + 'th-mapping.jpg']
     ],
     cases: [
       { brand: 'Xposible · Colsubsidio', title: 'Un reconocimiento distinto cada año', text: 'Desde 2019 acompañamos cada edición con proyección de gran formato, escenografías digitales e interactivos para los asistentes.', stat: ['2019', 'aliados desde'], video: V + 'v5.mp4', poster: I + 'p5.jpg' },
@@ -34,10 +34,10 @@ const CLUSTERS = [
     loop: V + 'cl-streaming.mp4',
     reel: 'https://player.vimeo.com/video/1217708609',
     services: [
-      ['Sets virtuales en 3D', 'Escenarios que cambian con cada marca, sin construir nada físico.', I + 'cov-set.jpg'],
-      ['Varias cámaras en vivo', 'Dirección y realización como en televisión.'],
-      ['Invitados en otras ciudades', 'Panelistas conectados desde donde estén, dentro del mismo set.'],
-      ['Transmisión a varias plataformas', 'La misma señal en la web, redes y plataformas internas.']
+      ['Sets virtuales en 3D', 'Escenarios que cambian con cada marca, sin construir nada físico.', I + 'th-set.jpg'],
+      ['Varias cámaras en vivo', 'Dirección y realización como en televisión.', I + 'th-camaras.jpg'],
+      ['Invitados en otras ciudades', 'Panelistas conectados desde donde estén, dentro del mismo set.', I + 'th-invitados.jpg'],
+      ['Transmisión a varias plataformas', 'La misma señal en la web, redes y plataformas internas.', I + 'th-multiplataforma.jpg']
     ],
     cases: [
       { brand: 'ZEISS Vision Care · Nestlé Ascenda', title: 'Ciencia contada en set virtual', text: 'Desde nuestro estudio transmitimos contenido científico para marcas de salud y bienestar, con sets virtuales que hacen visual la explicación técnica.', video: V + 'ciencia.mp4', poster: I + 'ciencia.jpg' },
@@ -54,10 +54,10 @@ const CLUSTERS = [
     loop: V + 'cl-plataformas.mp4',
     reel: 'https://player.vimeo.com/video/1218088093',
     services: [
-      ['Ferias y showrooms virtuales', 'Pabellones y stands que se recorren en línea.', I + 'cov-latam.jpg'],
-      ['Registro y reportes', 'Quién entró, cuánto tiempo estuvo y qué contenido vio.'],
-      ['Recorridos en 360', 'El espacio real, navegable desde cualquier pantalla.'],
-      ['Invitaciones que se juegan', 'Apps y micrositios donde cada reto desbloquea información.', I + 'cov-gesto.jpg']
+      ['Ferias y showrooms virtuales', 'Pabellones y stands que se recorren en línea.', I + 'th-latam.jpg'],
+      ['Registro y reportes', 'Quién entró, cuánto tiempo estuvo y qué contenido vio.', I + 'th-reportes.jpg'],
+      ['Recorridos en 360', 'El espacio real, navegable desde cualquier pantalla.', I + 'th-360.jpg'],
+      ['Invitaciones que se juegan', 'Apps y micrositios donde cada reto desbloquea información.', I + 'th-gesto.jpg']
     ],
     cases: [
       { brand: 'COP16 · Cali, 2024', title: 'La factura del aire', text: 'En tótems y en una plataforma digital, cada persona ingresaba su fecha de nacimiento y recibía su factura del aire: lo que le debe al planeta por todo lo que ha respirado.', stat: ['9.83M', 'de audiencia en medios'], video: V + 'v3.mp4', poster: I + 'p3.jpg' },
@@ -74,10 +74,10 @@ const CLUSTERS = [
     loop: V + 'cl-experiencias.mp4',
     reel: 'https://player.vimeo.com/video/1223248100',
     services: [
-      ['Juegos a la medida', 'Una mecánica propia para cada marca, para que la gente quiera repetir.', I + 'cov-juegos.jpg'],
-      ['Pantallas y tótems táctiles', 'Mesas, cubos y tótems que responden al tacto.', I + 'cov-totem.jpg'],
-      ['Realidad aumentada', 'Capas digitales sobre el espacio físico, con tablet o celular.', I + 'cov-ar.jpg'],
-      ['Experiencias con IA', 'La inteligencia artificial crea en vivo con lo que dice cada asistente.', I + 'cov-ia.jpg']
+      ['Juegos a la medida', 'Una mecánica propia para cada marca, para que la gente quiera repetir.', I + 'th-juegos.jpg'],
+      ['Pantallas y tótems táctiles', 'Mesas, cubos y tótems que responden al tacto.', I + 'th-totem.jpg'],
+      ['Realidad aumentada', 'Capas digitales sobre el espacio físico, con tablet o celular.', I + 'th-ar.jpg'],
+      ['Experiencias con IA', 'La inteligencia artificial crea en vivo con lo que dice cada asistente.', I + 'th-ia.jpg']
     ],
     cases: [
       { brand: 'Bancolombia · Festival Gabo', title: 'Laboratorio de historias', text: 'Cada asistente contaba su sueño y la IA lo convertía en tiempo real en un poema, una canción y una imagen.', stat: ['89%', 'de participación'], video: V + 'v6.mp4', poster: I + 'p6.jpg' },

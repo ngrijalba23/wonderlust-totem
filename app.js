@@ -2,6 +2,8 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const stage = $('#stage');
+  const player = $('#player');
+  const media = $('#playerMedia');
   let scale = 1;
   let current = 'attract';
   let clIndex = 0;
@@ -25,14 +27,15 @@
     syncVideos();
     if (id === 'attract') resetAttract();
     if (id === 'world' || id === 'close') $('#' + id).scrollTop = 0;
+    $$('video[data-src]').forEach(v => { seen.unobserve(v); seen.observe(v); });
   }
 
   // Solo se reproducen los videos de la pantalla visible
   function syncVideos() {
     $$('.screen video').forEach(v => {
       if (v.id === 'intro') return;
-      if (v.closest('.screen').id === current && v.src) v.play().catch(() => {});
-      else v.pause();
+      if (v.closest('.screen').id !== current) v.pause();
+      else if (!v.dataset.src && v.src) v.play().catch(() => {});
     });
   }
 
@@ -49,8 +52,10 @@
     shook = false;
     $('#attract').classList.add('roar');
     intro.muted = false;
+    intro.volume = 1;
     intro.currentTime = 0;
-    intro.play().catch(() => { intro.muted = true; intro.play().catch(enterWorld); });
+    // Si el navegador bloquea el sonido, no se reproduce en silencio: se espera el siguiente toque
+    intro.play().catch(() => { roaring = false; $('#attract').classList.remove('roar'); });
   }
 
   intro.addEventListener('timeupdate', () => {
@@ -83,8 +88,18 @@
     intro.currentTime = 0;
   }
 
-  $('#attract').addEventListener('pointerdown', e => { if (!e.target.closest('.skip')) wake(); });
+  $('#attract').addEventListener('click', e => { if (!e.target.closest('.skip')) wake(); });
   $('#attract .skip').addEventListener('click', enterWorld);
+
+  // ---------- Videos que se reproducen al desplazarse ----------
+  const seen = new IntersectionObserver(entries => entries.forEach(({ target: v, isIntersecting }) => {
+    if (isIntersecting && v.closest('.screen.active') && !player.classList.contains('open')) {
+      if (!v.getAttribute('src')) v.src = v.dataset.src;
+      v.play().catch(() => {});
+    } else v.pause();
+  }), { threshold: .45 });
+  const watch = root => $$('video[data-src]', root).forEach(v => seen.observe(v));
+  seen.observe($('#clLoop'));
 
   // ---------- 2 · Portales ----------
   CLUSTERS.forEach((c, i) => {
@@ -111,7 +126,8 @@
     $('#clTitle').innerHTML = `${c.title[0]}<span><em>${c.title[1]}</em></span>`;
     $('#clTag').textContent = c.tagline;
     $('#clDesc').textContent = c.desc;
-    setVideo($('#clLoop'), c.loop);
+    const loop = $('#clLoop');
+    if (loop.dataset.src !== c.loop) { loop.pause(); loop.removeAttribute('src'); loop.dataset.src = c.loop; loop.load(); }
     $('#playReel').onclick = () => openPlayer({ iframe: c.reel + '?autoplay=1&title=0&byline=0&portrait=0', brand: 'Reel', title: c.title.join(' ') });
 
     $('#clServices').innerHTML = c.services.map(([h, b, img]) => `<button class="svc">
@@ -125,9 +141,10 @@
 
     const cases = $('#clCases');
     cases.innerHTML = c.cases.map((k, j) => `<button class="case bezel" data-j="${j}"><div class="in">
-      <div class="ph" style="background-image:url('${k.poster}')"></div>
+      <div class="ph" style="background-image:url('${k.poster}')"><video muted loop playsinline preload="none" poster="${k.poster}" data-src="${k.video}"></video></div>
       <div class="t"><div class="brand">${k.brand}</div><h3>${k.title}</h3></div></div></button>`).join('');
     cases.scrollLeft = 0;
+    watch(cases);
     $$('.case', cases).forEach(el => el.addEventListener('click', () => {
       const k = c.cases[+el.dataset.j];
       openPlayer({ video: k.video, brand: k.brand, title: k.title, text: k.text, stat: k.stat });
@@ -139,13 +156,6 @@
 
     $$('button', dots).forEach((d, j) => d.classList.toggle('on', j === i));
     $('#clScroll').scrollTop = 0;
-  }
-
-  function setVideo(v, src) {
-    if (v.getAttribute('src') === src) return;
-    v.src = src;
-    v.load();
-    v.play().catch(() => {});
   }
 
   function openCluster(i, dir = 0) {
@@ -192,8 +202,6 @@
   $$('[data-go]').forEach(b => b.addEventListener('click', () => show(b.dataset.go)));
 
   // ---------- Reproductor ----------
-  const player = $('#player');
-  const media = $('#playerMedia');
 
   function openPlayer(o) {
     if (o.iframe) {
@@ -211,6 +219,7 @@
 
   function closePlayer() {
     player.classList.remove('open');
+    $$('video[data-src]').forEach(v => { seen.unobserve(v); seen.observe(v); });
     setTimeout(() => { if (!player.classList.contains('open')) media.innerHTML = ''; }, 500);
     syncVideos();
   }
