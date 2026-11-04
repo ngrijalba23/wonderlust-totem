@@ -139,19 +139,17 @@
       if (!open) s.classList.add('open');
     }));
 
+    // Casos uno debajo del otro: cada video arranca solo al llegar a él
     const cases = $('#clCases');
-    cases.innerHTML = c.cases.map((k, j) => `<button class="case" data-j="${j}">
+    cases.innerHTML = c.cases.map((k, j) => `<button class="case bezel" data-j="${j}"><div class="in">
       <video muted loop playsinline preload="none" poster="${k.poster}" data-src="${k.video}"></video>
       <div class="cap glass"><div class="brand">${k.brand}</div><h3>${k.title}</h3>${k.stat ? `<div class="st"><b>${k.stat[0]}</b><span>${k.stat[1]}</span></div>` : ''}</div>
-      <span class="expand">Ver con sonido ⤢</span></button>`).join('');
-    $('#clBars').innerHTML = c.cases.map(() => '<i><span></span></i>').join('');
-    $('#clSlider').classList.toggle('single', c.cases.length < 2);
+      <span class="expand">Ver con sonido ⤢</span></div></button>`).join('');
     watch(cases);
     $$('.case', cases).forEach(el => el.addEventListener('click', () => {
       const k = c.cases[+el.dataset.j];
       openPlayer({ video: k.video, brand: k.brand, title: k.title, text: k.text, stat: k.stat });
     }));
-    goSlide(0, false);
 
     const n = CLUSTERS[(i + 1) % CLUSTERS.length];
     $('#nextCl').innerHTML = `<button class="bezel"><div class="in"><img src="${n.cover}" alt=""><div><small>Siguiente portal</small><strong>${n.title.join('<br>')}</strong></div><i>→</i></div></button>`;
@@ -181,46 +179,10 @@
     }
   }
 
-  // ---------- Casos: deslizable con avance automático ----------
-  const SLIDE_MS = 7000;
-  let slide = 0, elapsed = 0, sliderSeen = false, holding = false, scrollWait;
-  const casesEl = $('#clCases');
-
-  function goSlide(j, smooth = true) {
-    const n = casesEl.children.length || 1;
-    slide = (j + n) % n;
-    elapsed = 0;
-    casesEl.scrollTo({ left: slide * casesEl.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
-    paintBars();
-  }
-  function paintBars() {
-    $$('#clBars span').forEach((b, k) => { b.style.width = k < slide ? '100%' : k === slide ? Math.min(100, elapsed / SLIDE_MS * 100) + '%' : '0%'; });
-  }
-  setInterval(() => {
-    if (current !== 'cluster' || !sliderSeen || holding || player.classList.contains('open') || casesEl.children.length < 2) return;
-    elapsed += 100;
-    if (elapsed >= SLIDE_MS) goSlide(slide + 1); else paintBars();
-  }, 100);
-
-  new IntersectionObserver(([e]) => { sliderSeen = e.isIntersecting; }, { threshold: .4 }).observe($('#clSlider'));
-  casesEl.addEventListener('pointerdown', () => { holding = true; });
-  addEventListener('pointerup', () => { holding = false; });
-  // Al deslizar con el dedo, el contador vuelve a empezar en el caso que quedó
-  casesEl.addEventListener('scroll', () => {
-    clearTimeout(scrollWait);
-    scrollWait = setTimeout(() => {
-      const j = Math.round(casesEl.scrollLeft / casesEl.clientWidth);
-      if (j !== slide) { slide = j; elapsed = 0; paintBars(); }
-    }, 120);
-  });
-  $('#clPrev').addEventListener('click', () => goSlide(slide - 1));
-  $('#clNext').addEventListener('click', () => goSlide(slide + 1));
-
   // Deslizar a los lados para cambiar de cluster
-  let sx = 0, sy = 0, st = 0, fromCases = false;
-  $('#cluster').addEventListener('pointerdown', e => { sx = e.clientX; sy = e.clientY; st = Date.now(); fromCases = !!e.target.closest('.slider'); });
+  let sx = 0, sy = 0, st = 0;
+  $('#cluster').addEventListener('pointerdown', e => { sx = e.clientX; sy = e.clientY; st = Date.now(); });
   $('#cluster').addEventListener('pointerup', e => {
-    if (fromCases) return;
     const dx = (e.clientX - sx) / scale, dy = (e.clientY - sy) / scale;
     if (Math.abs(dx) > 140 && Math.abs(dx) > Math.abs(dy) * 1.6 && Date.now() - st < 700) {
       const dir = dx < 0 ? 1 : -1;

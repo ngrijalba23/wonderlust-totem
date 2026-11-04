@@ -6,7 +6,7 @@ Experiencia táctil vertical (1080 × 1920) para tótem, con el lenguaje de estu
 
 1. **Espera**: el portal dorado respira en el estudio. Al primer toque arranca el video del T-rex de cristal que lo cruza y ruge; la pantalla tiembla en el rugido (`ROAR_AT` en `app.js`).
 2. **Mundo Wonderlust**: los cuatro portales con sus objetos de cristal (Producción audiovisual, Streaming y transmisiones, Plataformas digitales, Estrategia y experiencias digitales).
-3. **Cluster**: los videos arrancan solos al aparecer en pantalla y se pausan al salir. Reel completo (Vimeo), servicios con miniatura de cristal y casos en un deslizable que avanza solo cada 7 segundos (`SLIDE_MS` en `app.js`); cada caso se abre a pantalla completa con sonido. Se desliza a los lados para cambiar de cluster.
+3. **Cluster**: los videos arrancan solos al aparecer en pantalla y se pausan al salir. Reel completo (Vimeo), servicios con miniatura de cristal y casos uno debajo del otro, cuyo video arranca solo al llegar a él; cada caso se abre a pantalla completa con sonido. Se desliza a los lados para cambiar de cluster.
 4. **Cierre**: cómo trabajamos en cuatro pasos (bombillo, cubo, rompecabezas y claqueta de cristal), QR a wonderlust.live y contactos.
 
 El logo de Wonderlust en cualquier pantalla vuelve al portal. Si nadie toca la pantalla en 90 segundos, también vuelve (`IDLE_SECONDS` en `data.js`).
